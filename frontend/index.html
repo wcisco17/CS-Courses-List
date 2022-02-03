@@ -108,8 +108,8 @@
                         </div>
                         <div class="content">
                             <form action="/process_orders" method="post">
-                                <input name="id" id="id" :value="lesson._id" hidden>
-                                <button class="button is-info" type="submit">Add to cart</button>
+                                <input  name="id" id="id" :value="lesson._id" hidden>
+                                <button :disabled="lesson.availibility <= 0" class="button is-info" type="submit">Add to cart</button>
                             </form>
                         </div>
                     </div>
@@ -184,15 +184,16 @@
                             <div class="main-cart-container_item">
                                 <h5 class="title is-5">Subject: {{ cartItems.subject }}</h5>
                                 <h6 class="">Price: {{ cartItems.price }}</h6>
-                                <h6 class="has-text-weight-bold">Quantity: {{ cartItems.availibility }}
-                                    classes</h6>
+                                <h6 class="has-text-weight-bold">Quantity: {{ (5 - cartItems.availibility) }}
+                                    {{ (5 - cartItems.availibility) <= 1 ? 'class' : 'classes' }}</h6>
                                 <h6 class="">Location: {{ cartItems.location }}</h6>
                             </div>
                         </div>
+                        <form action="/delete_orders" method="post">
+                            <input  name="id" id="id" :value="cartItems._id" hidden>
+                            <button class="button is-info" type="submit">Remove</button>
+                        </form>
 
-                        <div v-on:click="removeFromCart(cartItems.id)" class="box-right">
-                            <i style="cursor: pointer;" class="fas fa-2x fa-trash"></i>
-                        </div>
                     </div>
                 </div>
                 <!-- End - Cart items -->

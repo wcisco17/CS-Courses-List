@@ -15,6 +15,7 @@ exports.getLessons = async (req, res) => res.json({lessons: req.lessons})
 exports.updatesLessons = async (req, res) => {
     /**** @type {Collection}*/
     const db = await connectDB(process.env.MONGODB_DB_NAME_ONE);
+
 }
 
 
