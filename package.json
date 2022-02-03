@@ -1,0 +1,25 @@
+{
+  "name": "cst_3145_coursework_2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gen:db": "node scripts/gen-lessons.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "flat-cache": "^3.0.4",
+    "flatted": "^3.2.5",
+    "mongodb": "^4.3.1",
+    "nodemon": "^2.0.15"
+  }
+}
