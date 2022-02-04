@@ -13,17 +13,49 @@ exports.uncompressedKey = (key) => {
 }
 
 /***
- * @param {Array<string>} orders
+ * @param {Array<{_id: string, quantity: number}>} orders
  */
 exports.removeDuplicates = (orders) => {
+    if (!orders) return [{ _id: '', quantity: 0 }]
+    let res = []
     let mapping = {}
     orders?.filter(order => {
-        if (mapping[order] !== order) {
-            mapping[order] = true
+        if (mapping[order._id] !== order._id) {
+            mapping[order._id] = order.quantity // takes the lowest value
         }
     })
 
-    return Object.keys(mapping)
+    const quantity = Object.values(mapping)
+    const _id = Object.keys(mapping)
+
+    if (quantity.length === _id.length) {
+        for (let i = 0; i < _id.length; i++) {
+            res.push({ _id: _id[i], quantity: quantity[i] })
+        }
+    }
+
+    return res
+}
+
+/**
+ *
+ * @param {Array<{_id: string, quantity: number}>} cartItems
+ * @param {Array<any>} lessons
+ * @param {Array<any>} orders
+ */
+exports.filterOrders = (cartItems, lessons, orders) => {
+    if (!cartItems) return [{ _id: '', quantity: 0 }]
+    for (const item of cartItems) {
+        lessons.filter(lesson => {
+            if (lesson._id.toString() === item._id.toString()) {
+                orders.push({
+                    ...lesson,
+                    quantity: item.quantity
+                })
+            }
+        })
+    }
+    return orders;
 }
 
 

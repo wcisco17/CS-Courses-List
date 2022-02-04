@@ -21,7 +21,8 @@ exports.orders = {
         const cookieExist = req.cookies[COOKIE_ID]
         const orderCookieList = req.cookies[constant.CART_COOKIE_VALUE]
         let db;
-        let cartItems = []
+        /**** @type {Array<_id: string, quantity: number>}*/
+        let cartItems = [{ _id: '', quantity: 0 }]
 
         /*** @type {ECDH} db */
         const user = crypto.createECDH('secp256k1');
@@ -57,7 +58,7 @@ exports.orders = {
                     order_id: userKey
                 }, (err, data) => {
                     if (err) {
-                        req.orders = [];
+                        req.orders = [{ _id: '', quantity: 0 }];
                         next()
                     }
                     const orderIdDB = data.lessons;
@@ -67,8 +68,7 @@ exports.orders = {
                 })
             } else {
                 // filter process here
-                console.log('cookie exist')
-                req.orders = removeDuplicates(orderCookieList);
+                req.orders = removeDuplicates(orderCookieList)
                 next()
             }
             next()

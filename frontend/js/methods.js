@@ -1,38 +1,20 @@
 function addToCart(id) {
-    const { lessons, cart } = this;
-
-    const lesson = lessons.find((lesson) => lesson.id == id)
-
-    if (lesson.availibility > 0)
-        lesson.availibility--;
-    if (lesson.availibility == 0)
-        lesson.isSoldOut = true
-
-    for (let i = 0; i < cart.length; i++) {
-        if (cart[i].id == lesson.id) {
-            return
-        }
-    }
-
-    return cart.push(lesson)
-}
-
-function removeFromCart(lessonIdx) {
-    const { cart } = this;
-
-    if (lessonIdx != null && cart.length > 0) {
-        const deletCartItem = cart.find((cartItem, i) => {
-            if (cartItem?.id == lessonIdx) {
-                cartItem.availibility = 5
-                cartItem.isSoldOut = false
-                cart.splice(i, 1)
-            }
+    const lesson = this.lessons.data.find((lesson) => lesson._id === id)
+    if (lesson)
+        return fetch('/add_order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id, quantity: lesson.availibility -= 1})
+        }).then(res => {
+            return reload()
         })
-        return deletCartItem
-    }
+            .then(data => window.location.reload())
+            .catch(err => err)
 }
 
-function submitForm(e) {
+async function submitForm(e) {
     e.preventDefault()
     let result = null
     const name = this.formState.nameItem;
@@ -44,20 +26,15 @@ function submitForm(e) {
     if (!isNumberValue || !isTextValue) {
         this.formState.valid = true
         result = null;
-    }
-    else
-        result = { name, phone }
+    } else
+        result = {name, phone}
 
-    if (result != null) {
-        // simulate the notification and return to the original state
-        setTimeout(() => {
-            this.isSuccessOrder = false
-            window.location.reload()
-        }, 3000)
-
-        this.isSuccessOrder = true
-
-        return result;
+    if (result) {
+        return fetch('/update_lessons', {
+            method: 'PUT',
+        }).then(res => {
+            return reload()
+        }).catch(err => err)
     }
 }
 
@@ -66,7 +43,7 @@ function reload() {
 }
 
 function navigateToCart() {
-    const { isCartOpen } = this;
+    const {isCartOpen} = this;
     if (!isCartOpen)
         this.isCartOpen = true
     else
@@ -75,10 +52,9 @@ function navigateToCart() {
 
 const methods = {
     addToCart,
-    removeFromCart,
     navigateToCart,
     submitForm,
     reload
 }
 
-export { methods }
+export {methods}

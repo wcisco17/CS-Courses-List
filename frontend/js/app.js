@@ -10,6 +10,7 @@ const lessonsApp = {
             loading: false,
         },
         cart: [],
+        quantity: 0,
         isCartOpen: false,
         isSuccessOrder: false,
         search: '',

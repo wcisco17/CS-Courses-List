@@ -44,37 +44,6 @@
             </div>
             <!-- End - Header Container -->
 
-            <div class="select-container">
-                <!-- Start - Select Container -->
-                <div class="mb-5 select-container_cus1">
-                    <div class="select">
-                        <select v-model='selected'>
-                            <option v-for="item in values">
-                                {{ item }}
-                            </option>
-                        </select>
-                    </div>
-
-                </div>
-                <!-- End - Select Container -->
-
-                <!-- Start - Sort -->
-                <div class="mb-5 select-container_cus2">
-                    <div class="control">
-                        <input v-model='order' value="Ascending" type="radio" id="asc">
-                        <label for='asc'>Ascending</label>
-
-                        <input v-model='order' value="Descending" type="radio" id="desc">
-                        <label for='desc'>Descending</label>
-                    </div>
-                </div>
-                <!-- End - Sort -->
-
-            </div>
-
-            <div class="search-box-container">
-                <input v-model="search" class="input is-medium" type="text" placeholder="Try: 'Math'">
-            </div>
 
             <!-- Start - Card Container -->
             <div class="card-container">
@@ -103,14 +72,10 @@
                                 <p class="title is-4">Subject: {{ lesson.subject }}</p>
                                 <p class="subtitle pt-5">Location: {{ lesson.location }}</p>
                                 <p class="subtitle pt-5">Price: {{ lesson.price }}</p>
-                                <p class="subtitle pt-5">Spaces: {{ lesson.availibility }}</p>
                             </div>
                         </div>
                         <div class="content">
-                            <form action="/process_orders" method="post">
-                                <input  name="id" id="id" :value="lesson._id" hidden>
-                                <button :disabled="lesson.availibility <= 0" class="button is-info" type="submit">Add to cart</button>
-                            </form>
+                            <button v-on:click="addToCart(lesson._id)" :disabled="lesson.availibility <= 0 || quantity >= 5" class="button is-info">Add to cart</button>
                         </div>
                     </div>
                 </div>
@@ -184,16 +149,11 @@
                             <div class="main-cart-container_item">
                                 <h5 class="title is-5">Subject: {{ cartItems.subject }}</h5>
                                 <h6 class="">Price: {{ cartItems.price }}</h6>
-                                <h6 class="has-text-weight-bold">Quantity: {{ (5 - cartItems.availibility) }}
-                                    {{ (5 - cartItems.availibility) <= 1 ? 'class' : 'classes' }}</h6>
+                                <h6 class="has-text-weight-bold">Quantity: {{ cartItems.quantity }}
+                                    {{ (cartItems.quantity) <= 1 ? 'class' : 'classes' }}</h6>
                                 <h6 class="">Location: {{ cartItems.location }}</h6>
                             </div>
                         </div>
-                        <form action="/delete_orders" method="post">
-                            <input  name="id" id="id" :value="cartItems._id" hidden>
-                            <button class="button is-info" type="submit">Remove</button>
-                        </form>
-
                     </div>
                 </div>
                 <!-- End - Cart items -->
