@@ -25,20 +25,24 @@ exports.addOrders = async (req, res) => {
     const cookieExist = uncompressedKey(req.cookies[COOKIE_ID]);
     let cartItems = req.cookies[constant.CART_COOKIE_VALUE];
     let orders = {_id: req.body.id, quantity: (Number(req.body.quantity))}
-
+    let result;
     return (await connectDB(process.env.MONGODB_DB_NAME_TWO)).updateOne({
             order_id: cookieExist,
         }, {
             $addToSet: {lessons: orders},
         },
     ).then(() => {
-        console.log({guestOrders: 'successfully saved', lessons: 'successfully saved'});
+        console.log({
+            guestOrders: 'updateOne - successfully saved',
+            lessons: 'updateOne - successfully saved'
+        });
+        result = {result: 'success'}
         cartItems.push(orders)
         res.cookie(constant.CART_COOKIE_VALUE, cartItems)
-        res.redirect('/')
+        res.send(result)
     }).catch(error => {
-        console.log(error)
         // redirect back to main page
-        res.redirect("/")
+        result = {result: 'error'}
+        res.send(result)
     })
 }

@@ -16,7 +16,7 @@ exports.uncompressedKey = (key) => {
  * @param {Array<{_id: string, quantity: number}>} orders
  */
 exports.removeDuplicates = (orders) => {
-    if (!orders) return [{ _id: '', quantity: 0 }]
+    if (!orders) return [{_id: '', quantity: 0}]
     let res = []
     let mapping = {}
     orders?.filter(order => {
@@ -30,7 +30,7 @@ exports.removeDuplicates = (orders) => {
 
     if (quantity.length === _id.length) {
         for (let i = 0; i < _id.length; i++) {
-            res.push({ _id: _id[i], quantity: quantity[i] })
+            res.push({_id: _id[i], quantity: quantity[i]})
         }
     }
 
@@ -44,7 +44,7 @@ exports.removeDuplicates = (orders) => {
  * @param {Array<any>} orders
  */
 exports.filterOrders = (cartItems, lessons, orders) => {
-    if (!cartItems) return [{ _id: '', quantity: 0 }]
+    if (!cartItems) return [{_id: '', quantity: 0}]
     for (const item of cartItems) {
         lessons.filter(lesson => {
             if (lesson._id.toString() === item._id.toString()) {
@@ -58,6 +58,23 @@ exports.filterOrders = (cartItems, lessons, orders) => {
     return orders;
 }
 
+/**
+ * @param {Array<{_id: string, quantity: number}>} cartItems
+ * @param {Array<any>} lessons
+ */
+exports.transformLessonsWithQuantity = (cartItems, lessons) => {
+    cartItems?.map((order) => {
+        lessons?.filter((lesson, i) => {
+            if (order._id === lesson._id.toString()) {
+                lessons.splice(i, 1)
+                lessons.push({
+                    ...lesson,
+                    quantity: order.quantity
+                })
+            }
+        })
+    })
+}
 
 /**
  * @param {string} idx

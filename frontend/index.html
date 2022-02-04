@@ -72,10 +72,16 @@
                                 <p class="title is-4">Subject: {{ lesson.subject }}</p>
                                 <p class="subtitle pt-5">Location: {{ lesson.location }}</p>
                                 <p class="subtitle pt-5">Price: {{ lesson.price }}</p>
+                                <p class="subtitle pt-5">Space: {{
+                                        lesson?.quantity
+                                    }}</p>
                             </div>
                         </div>
                         <div class="content">
-                            <button v-on:click="addToCart(lesson._id)" :disabled="lesson.availibility <= 0 || quantity >= 5" class="button is-info">Add to cart</button>
+                            <button v-on:click="addToCart(lesson._id)"
+                                    :disabled="lesson.availibility <= 0 || quantity >= 5" class="button is-info">Add to
+                                cart
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -149,8 +155,11 @@
                             <div class="main-cart-container_item">
                                 <h5 class="title is-5">Subject: {{ cartItems.subject }}</h5>
                                 <h6 class="">Price: {{ cartItems.price }}</h6>
-                                <h6 class="has-text-weight-bold">Quantity: {{ cartItems.quantity }}
-                                    {{ (cartItems.quantity) <= 1 ? 'class' : 'classes' }}</h6>
+                                <h6 class="has-text-weight-bold">Quantity:
+                                    {{ (cartItems.availibility - cartItems.quantity) }}
+                                    {{
+                                        ((cartItems.availibility - cartItems.quantity)) <= 1 ? 'class' : 'classes'
+                                    }}</h6>
                                 <h6 class="">Location: {{ cartItems.location }}</h6>
                             </div>
                         </div>

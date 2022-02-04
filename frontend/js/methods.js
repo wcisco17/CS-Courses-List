@@ -1,17 +1,21 @@
-function addToCart(id) {
+async function addToCart(id) {
     const lesson = this.lessons.data.find((lesson) => lesson._id === id)
-    if (lesson)
-        return fetch('/add_order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({id, quantity: lesson.availibility -= 1})
-        }).then(res => {
-            return reload()
-        })
-            .then(data => window.location.reload())
-            .catch(err => err)
+    if (lesson) {
+        try {
+            const orders = await fetch('/add_order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({id: lesson._id, quantity: lesson.availibility -= 1})
+            })
+            if (orders.status === 200) {
+                return reload()
+            }
+        } catch (err) {
+            throw new Error(`Error: ${err}`)
+        }
+    }
 }
 
 async function submitForm(e) {
@@ -30,11 +34,19 @@ async function submitForm(e) {
         result = {name, phone}
 
     if (result) {
-        return fetch('/update_lessons', {
-            method: 'PUT',
-        }).then(res => {
-            return reload()
-        }).catch(err => err)
+        try {
+            const orders = await fetch('/update_lessons', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            if (orders.status === 200) {
+                return reload()
+            }
+        } catch (err) {
+            throw new Error(`Error: ${err}`)
+        }
     }
 }
 

@@ -18,6 +18,6 @@ app.get('/orders', [
 ], getOrders)
 app.put(`/update_lessons`, orders.initializeOrders, updatesLessons)
 app.get('/lessons', [lessons.lessonsMiddleware, orders.initializeOrders], getLessons)
-app.post('/add_order',  addOrders);
+app.post('/add_order', addOrders);
 
 module.exports = {app}
