@@ -13,5 +13,5 @@ app.use("/", routes.app);
 
 let hostname = "0.0.0.0";
 app.listen((PORT), hostname, () => {
-    console.log(`Listening on port: ${PORT}`);
+    console.log(`Listening on PORT: ${PORT}`);
 });
