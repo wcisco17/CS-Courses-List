@@ -1,5 +1,4 @@
 const {connectDB} = require('../util/db');
-const {ObjectId} = require('mongodb');
 const {constant, uncompressedKey, transformLessonsWithQuantity} = require('../util/util');
 
 /**
