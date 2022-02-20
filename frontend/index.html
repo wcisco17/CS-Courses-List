@@ -73,13 +73,13 @@
                                 <p class="subtitle pt-5">Location: {{ lesson.location }}</p>
                                 <p class="subtitle pt-5">Price: {{ lesson.price }}</p>
                                 <p class="subtitle pt-5">Space: {{
-                                        lesson?.quantity
+                                        lesson?.quantity != null ? (lesson.quantity) : (lesson.availibility)
                                     }}</p>
                             </div>
                         </div>
                         <div class="content">
                             <button v-on:click="addToCart(lesson._id)"
-                                    :disabled="lesson.availibility <= 0 || quantity >= 5" class="button is-info">Add to
+                                    :disabled="lesson.availibility <= 0 || lesson.quantity >= 5 || lesson.quantity <= 0" class="button is-info">Add to
                                 cart
                             </button>
                         </div>

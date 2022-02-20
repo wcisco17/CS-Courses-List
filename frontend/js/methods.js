@@ -1,13 +1,18 @@
 async function addToCart(id) {
     const lesson = this.lessons.data.find((lesson) => lesson._id === id)
+
     if (lesson) {
+        let updateValues = (lesson.quantity != null) ? lesson.quantity : lesson.availibility
+        console.log(updateValues)
         try {
             const orders = await fetch('/add_order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({id: lesson._id, quantity: lesson.availibility -= 1})
+                body: JSON.stringify(
+                    {id: lesson._id, quantity: (updateValues) -= 1}
+                )
             })
             if (orders.status === 200) {
                 return reload()

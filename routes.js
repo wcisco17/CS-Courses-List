@@ -12,12 +12,9 @@ app.use(cookieParser())
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.get('/orders', [
-    lessons.lessonsMiddleware,
-    orders.initializeOrders,
-], getOrders)
-app.put(`/update_lessons`, orders.initializeOrders, updatesLessons)
+app.get('/orders', [lessons.lessonsMiddleware, orders.refreshCart], getOrders)
+app.put(`/update_lessons`, [orders.initializeOrders], updatesLessons)
 app.get('/lessons', [lessons.lessonsMiddleware, orders.initializeOrders], getLessons)
-app.post('/add_order', addOrders);
+app.post('/add_order', [orders.initializeOrders], addOrders);
 
 module.exports = {app}

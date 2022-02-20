@@ -1,5 +1,6 @@
 const {connectDB} = require('../util/db');
 const {constant, uncompressedKey, transformLessonsWithQuantity} = require('../util/util');
+const {ObjectId} = require('mongodb');
 
 /**
  * @param {Request} req
@@ -19,28 +20,33 @@ exports.updatesLessons = async (req, res) => {
     const cartItems = req.orders;
     const COOKIE_ID = process.env.COOKIE_ID;
     const orderIdCookie = uncompressedKey(req.cookies[COOKIE_ID]);
-    console.log(cartItems)
-    const deleteGuestOrder = cartItems.map(async items => {
+    const filterEmptyStr = cartItems.filter((cartItem) => cartItem._id.length >= 24);
+
+    const deleteGuestOrder = filterEmptyStr.map(async items => {
         (await connectDB(process.env.MONGODB_DB_NAME_TWO))?.updateOne({
             order_id: orderIdCookie,
         }, {
-            $pull: {lessons: {_id: items._id}}
+            $set: {ordered: true}
         })
     })
 
-    const resetLessons = cartItems.map(async items => {
-        (await connectDB(process.env.MONGODB_DB_NAME_ONE)).updateOne({id: items.id}, {
+    const resetLessons = filterEmptyStr.map(async items => {
+        (await connectDB(process.env.MONGODB_DB_NAME_ONE)).updateOne({
+            _id: new ObjectId(items._id)
+        }, {
             $set: {availibility: (items.quantity)}
         })
     })
 
     return Promise.all([deleteGuestOrder, resetLessons])
-        .then((data) => {
-            console.log({data})
+        .then(() => {
             console.log({deleteGuestOrders: 'successfully deleted', resetLessons: 'successfully reset'});
+            console.log({resetLessons})
+            // reset cookies and cart
+            res.clearCookie(COOKIE_ID)
+            res.clearCookie(constant.CART_COOKIE_VALUE)
 
-            res.cookie(constant.CART_COOKIE_VALUE, [{_id: '', quantity: 0}])
-            res.send({ result: 'success' })
+            res.send({result: 'success'})
         })
         .catch(error => {
             return error

@@ -49,6 +49,8 @@ const lessonsApp = {
 
             this.cart = ordersResult.cart;
         })
+
+        console.log(this.lessons)
     },
 
     updated() {

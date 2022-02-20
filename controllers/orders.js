@@ -26,23 +26,43 @@ exports.addOrders = async (req, res) => {
     let cartItems = req.cookies[constant.CART_COOKIE_VALUE];
     let orders = {_id: req.body.id, quantity: (Number(req.body.quantity))}
     let result;
-    return (await connectDB(process.env.MONGODB_DB_NAME_TWO)).updateOne({
-            order_id: cookieExist,
-        }, {
-            $addToSet: {lessons: orders},
-        },
-    ).then(() => {
-        console.log({
-            guestOrders: 'updateOne - successfully saved',
-            lessons: 'updateOne - successfully saved'
-        });
-        result = {result: 'success'}
-        cartItems.push(orders)
-        res.cookie(constant.CART_COOKIE_VALUE, cartItems)
-        res.send(result)
-    }).catch(error => {
-        // redirect back to main page
-        result = {result: 'error'}
-        res.send(result)
-    })
+
+    const orderExist = req.orders?.find(prevCartOrder => prevCartOrder._id === orders._id);
+
+    let updateOrders;
+    let db = (await connectDB(process.env.MONGODB_DB_NAME_TWO));
+
+    // if the orderExists only update the quantity
+    if (orderExist) {
+        updateOrders = {
+            filter: {
+                order_id: cookieExist,
+                "lessons._id": orders._id
+            },
+            update: {
+                $set: {
+                    "lessons.$.quantity": orders.quantity
+                }
+            }
+        }
+    } else {
+        updateOrders = {
+            filter: {
+                order_id: cookieExist
+            },
+            update: {
+                $addToSet: {
+                    lessons: orders
+                }
+            }
+        }
+    }
+
+    return db?.updateOne({...updateOrders.filter}, {...updateOrders.update})
+        .then(() => {
+            cartItems.push(orders)
+            res.cookie(constant.CART_COOKIE_VALUE, cartItems)
+            result = {result: 'success'}
+            res.send(result)
+        }).catch(err => err)
 }
