@@ -1,4 +1,3 @@
-import computed from './computed.js';
 import {methods} from './methods.js';
 
 const lessonsApp = {
@@ -10,13 +9,7 @@ const lessonsApp = {
             loading: false,
         },
         cart: [],
-        quantity: 0,
         isCartOpen: false,
-        isSuccessOrder: false,
-        search: '',
-        selected: '',
-        order: 'Ascending',
-        values: ['all', 'subject', 'location', 'price', 'availibility'],
         formState: {
             phoneItem: "",
             nameItem: "",
@@ -50,7 +43,6 @@ const lessonsApp = {
             this.cart = ordersResult.cart;
         })
 
-        console.log(this.lessons)
     },
 
     updated() {
@@ -64,7 +56,6 @@ const lessonsApp = {
             this.formState.valid = true
     },
     methods,
-    computed
 }
 
 export default lessonsApp;

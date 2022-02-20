@@ -5,9 +5,12 @@ const {NextFunction} = require('express')
 const crypto = require('crypto');
 const {constant, uncompressedKey, removeDuplicates} = require('./util');
 
+// @TODO – Create a ‘logger’ middleware that output all requests to the server console
 exports.logger = () => {
-    // @TODO – Create a ‘logger’ middleware that output all requests to the server console
-    //  @TODO - Create a static file middleware that returns lesson images or an error message if the image file does not exist.
+}
+
+//  @TODO - Create a static file middleware that returns lesson images or an error message if the image file does not exist.
+exports.staticMiddleware = () => {
 }
 
 exports.orders = {
@@ -57,7 +60,7 @@ exports.orders = {
                     req.orders = [{_id: '', quantity: 0}];
                     next()
                 }
-                const orderIdDB = data.lessons;
+                const orderIdDB = data?.lessons;
                 req.orders = orderIdDB;
                 res.cookie(constant.CART_COOKIE_VALUE, orderIdDB)
                 next()
