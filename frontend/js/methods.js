@@ -47,6 +47,7 @@ async function submitForm(e) {
                 },
             })
             if (orders.status === 200) {
+                this.isSuccessOrder = true;
                 return reload()
             }
         } catch (err) {

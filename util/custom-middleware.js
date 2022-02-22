@@ -3,15 +3,10 @@ const {connectDB} = require('./db');
 const {Collection} = require('mongodb')
 const {NextFunction} = require('express')
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+
 const {constant, uncompressedKey, removeDuplicates} = require('./util');
-
-// @TODO – Create a ‘logger’ middleware that output all requests to the server console
-exports.logger = () => {
-}
-
-//  @TODO - Create a static file middleware that returns lesson images or an error message if the image file does not exist.
-exports.staticMiddleware = () => {
-}
 
 exports.orders = {
     /**
@@ -87,6 +82,7 @@ exports.orders = {
     }
 }
 
+
 exports.lessons = {
     /**
      * @param {Request} req
@@ -112,4 +108,56 @@ exports.lessons = {
                 next()
             })
     },
+}
+
+exports.custom = {
+    /**
+     * @param {Request} req
+     * @param {Response} res
+     * @param {NextFunction} next
+     */
+    logger: (req, res, next) => {
+        const customReq = req;
+        console.log('[CUSTOM_LOGGER]: Route visited', customReq.originalUrl);
+        next()
+    },
+
+    /**
+     * @param {Request} req
+     * @param {Response} res
+     * @param {NextFunction} next
+     */
+
+    staticMiddleware: async (req, res, next) => {
+        const lessonsImg = req.lessons;
+        const dir_path = path.resolve(__dirname, '../files');
+        const dir_exist = fs.existsSync(dir_path);
+        if (!dir_exist) {
+            fs.mkdirSync(dir_path)
+            lessonsImg.map((files) => {
+                const data = JSON.stringify({id: files._id, img: files.url})
+                try {
+                    const fileName = `${dir_path}/${files._id}.json`;
+                    fs.writeFileSync(fileName, data);
+                } catch (err) {
+                    throw new Error(`Could not write file reason: ${err}`)
+                }
+            })
+            res.send('success')
+        } else if (dir_exist) {
+            try {
+                const files = fs.readdirSync(dir_path);
+                let allImg = []
+                files.map((items) => {
+                    const allFiles = fs.readFileSync(`${dir_path}/${items}`)
+                    const lessonsImg = JSON.parse(Buffer.from(allFiles).toString())
+                    allImg.push(lessonsImg)
+                })
+                res.send(allImg)
+            } catch (err) {
+                throw new Error(`Could not write file reason: ${err}`)
+            }
+        }
+    }
+
 }

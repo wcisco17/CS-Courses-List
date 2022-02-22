@@ -45,7 +45,9 @@ exports.addOrders = async (req, res) => {
                 }
             }
         }
-    } else {
+    }
+    // if it's a brand-new order push it to the lessons array
+    else {
         updateOrders = {
             filter: {
                 order_id: cookieExist

@@ -10,6 +10,7 @@ const lessonsApp = {
         },
         cart: [],
         isCartOpen: false,
+        isSuccessOrder: false,
         formState: {
             phoneItem: "",
             nameItem: "",
