@@ -12,7 +12,7 @@ exports.getLessons = async (req, res) => {
 }
 
 /**
- * @function updateLessons - Updates two parts: The overall Lesson query & Whenever there is change when purchasing aN ITEM
+ * @function updateLessons - Updates two parts: The overall Lesson query & Whenever there is change when purchasing an item.
  * @param {Request} req
  * @param {Response} res
  */
