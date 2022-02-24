@@ -41,7 +41,7 @@ exports.orders = {
             })
             next()
         }
-        // refresh the cookie if null
+        // refresh if the cookie is null.
         else if (!orderCookieList) {
             /**** @type {Collection}*/
             db = await connectDB(process.env.MONGODB_DB_NAME_TWO)
