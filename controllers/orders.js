@@ -46,7 +46,7 @@ exports.addOrders = async (req, res) => {
             }
         }
     }
-    // if it's a brand-new order push it to the lessons array
+    // if it's a brand-new order append it to the lessons array
     else {
         updateOrders = {
             filter: {
