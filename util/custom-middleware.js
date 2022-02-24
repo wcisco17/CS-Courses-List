@@ -121,7 +121,7 @@ exports.custom = {
      */
     logger: (req, res, next) => {
         const customReq = req;
-        console.log('[CUSTOM_LOGGER]: Route visited', customReq.originalUrl);
+        console.log('[CUSTOM_LOGGER]: Route visited: ', customReq.originalUrl);
         next()
     },
 
