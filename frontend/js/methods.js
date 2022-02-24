@@ -1,3 +1,4 @@
+
 async function addToCart(id) {
     const lesson = this.lessons.data.find((lesson) => lesson._id === id)
 
@@ -72,7 +73,7 @@ const methods = {
     addToCart,
     navigateToCart,
     submitForm,
-    reload
+    reload,
 }
 
 export {methods}

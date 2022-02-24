@@ -21,7 +21,6 @@ exports.updatesLessons = async (req, res) => {
     const COOKIE_ID = process.env.COOKIE_ID;
     const orderIdCookie = uncompressedKey(req.cookies[COOKIE_ID]);
     const filterEmptyStr = cartItems.filter((cartItem) => cartItem._id.length >= 24);
-
     const deleteGuestOrder = filterEmptyStr.map(async items => {
         (await connectDB(process.env.MONGODB_DB_NAME_TWO))?.updateOne({
             order_id: orderIdCookie,
@@ -40,8 +39,6 @@ exports.updatesLessons = async (req, res) => {
 
     return Promise.all([deleteGuestOrder, resetLessons])
         .then(() => {
-            console.log({deleteGuestOrders: 'successfully deleted', resetLessons: 'successfully reset'});
-            console.log({resetLessons})
             // reset cookies and cart
             res.clearCookie(COOKIE_ID)
             res.clearCookie(constant.CART_COOKIE_VALUE)
