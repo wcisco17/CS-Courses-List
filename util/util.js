@@ -44,8 +44,7 @@ exports.removeDuplicates = (orders) => {
  * @param {Array<any>} orders
  */
 exports.filterOrders = (cartItems, lessons, orders) => {
-    if (!cartItems) return [{_id: '', quantity: 0}]
-    for (const item of cartItems) {
+    for (const item of cartItems.lessons) {
         lessons.filter(lesson => {
             if (lesson._id.toString() === item._id.toString()) {
                 orders.push({
@@ -63,7 +62,7 @@ exports.filterOrders = (cartItems, lessons, orders) => {
  * @param {Array<any>} lessons
  */
 exports.transformLessonsWithQuantity = (cartItems, lessons) => {
-    cartItems?.map((order) => {
+    cartItems?.lessons.map((order) => {
         lessons?.filter((lesson, i) => {
             if (order._id === lesson._id.toString()) {
                 lessons.splice(i, 1)

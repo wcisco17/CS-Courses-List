@@ -13,7 +13,7 @@ exports.getOrders = async (req, res) => {
     /** @type Array<any> */
     const lessons = req.lessons;
     filterOrders(cartItems, lessons, orders)
-    res.send({cart: orders})
+    res.send(orders)
 }
 
 /**
@@ -21,11 +21,11 @@ exports.getOrders = async (req, res) => {
  * @param {Response} res
  */
 exports.addOrders = async (req, res) => {
-    const cookieExist = '047f6d6c9bae2780258f566f9cfae93757c8e27b0f056fd3d182894271c32724f87f1d6a9ee6d1c56cca6a4dbafe57a8fd38d00add64026344a02d1facdef5cda5';
+    const cookieExist = process.env.GUEST_USER;
     let orders = {_id: req.body.id, quantity: (Number(req.body.quantity))}
     let result;
 
-    const orderExist = req.orders?.find(prevCartOrder => prevCartOrder._id === orders._id);
+    const orderExist = req.orders?.lessons.find(prevCartOrder => prevCartOrder._id === orders._id);
 
     let updateOrders;
     let db = (await connectDB(process.env.MONGODB_DB_NAME_TWO));

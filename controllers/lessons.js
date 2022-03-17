@@ -17,15 +17,14 @@ exports.getLessons = async (req, res) => {
  * @param {Response} res
  */
 exports.updatesLessons = async (req, res) => {
-    const cartItems = req.orders;
-    const COOKIE_ID = process.env.COOKIE_ID;
-    const orderIdCookie = uncompressedKey(req.cookies[COOKIE_ID]);
+    const cartItems = req.orders.lessons;
+    const orderIdCookie = process.env.GUEST_USER;
     const filterEmptyStr = cartItems.filter((cartItem) => cartItem._id.length >= 24);
     const deleteGuestOrder = filterEmptyStr.map(async items => {
         (await connectDB(process.env.MONGODB_DB_NAME_TWO))?.updateOne({
             order_id: orderIdCookie,
         }, {
-            $set: {ordered: true}
+            $set: {lessons: []}
         })
     })
 
@@ -40,9 +39,6 @@ exports.updatesLessons = async (req, res) => {
     return Promise.all([deleteGuestOrder, resetLessons])
         .then(() => {
             // reset cookies and cart
-            res.clearCookie(COOKIE_ID)
-            res.clearCookie(constant.CART_COOKIE_VALUE)
-
             res.send({result: 'success'})
         })
         .catch(error => {
