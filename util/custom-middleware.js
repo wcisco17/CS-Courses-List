@@ -91,36 +91,26 @@ exports.custom = {
      * @param {Response} res
      * @param {NextFunction} next
      */
-
     staticMiddleware: async (req, res, next) => {
-        const lessonsImg = req.lessons;
-        const dir_path = path.resolve(__dirname, '../files');
-        const dir_exist = fs.existsSync(dir_path);
-        if (!dir_exist) {
-            fs.mkdirSync(dir_path)
-            lessonsImg.map((files) => {
-                const data = JSON.stringify({id: files._id, img: files.url})
-                try {
-                    const fileName = `${dir_path}/${files._id}.json`;
-                    fs.writeFileSync(fileName, data);
-                } catch (err) {
-                    throw new Error(`Could not write file reason: ${err}`)
+        if (req.url.length >= 2) {
+            const lessons = req.lessons;
+            const file = req.url.replace('/', '');
+            lessons.find(({url}) => {
+                if (url === file) {
+                    const images = path.join(__dirname, '../assets', url);
+                    fs.stat(images, (err, data) => {
+                        if (err) {
+                            next()
+                            return
+                        }
+                        if (data.isFile())
+                            res.sendFile(images)
+                        else next()
+                    });
                 }
             })
-            res.send('success')
-        } else if (dir_exist) {
-            try {
-                const files = fs.readdirSync(dir_path);
-                let allImg = []
-                files.map((items) => {
-                    const allFiles = fs.readFileSync(`${dir_path}/${items}`)
-                    const lessonsImg = JSON.parse(Buffer.from(allFiles).toString())
-                    allImg.push(lessonsImg)
-                })
-                res.send(allImg)
-            } catch (err) {
-                throw new Error(`Could not write file reason: ${err}`)
-            }
+        } else {
+            res.send('Missing image')
         }
     }
 
