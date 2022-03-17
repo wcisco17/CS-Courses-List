@@ -17,6 +17,9 @@ app.get('/orders', [lessons.lessonsMiddleware, orders.initializeOrders, custom.l
 app.put(`/update_lessons`, [orders.initializeOrders, custom.logger], updatesLessons)
 app.get('/lessons', [lessons.lessonsMiddleware, orders.initializeOrders], getLessons)
 
+app.get('/', (req, res) => {
+    res.send('Hello, world')
+})
 
 app.post('/add_order', [orders.initializeOrders, custom.logger], addOrders);
 
