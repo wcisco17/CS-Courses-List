@@ -61,9 +61,6 @@ exports.orders = {
                 next()
             })
         } else {
-            const user = crypto.createECDH('secp256k1');
-            const userKey = user.generateKeys();
-            console.log(userKey.toString('hex'))
             req.orders = removeDuplicates(orderCookieList);
             next()
         }

@@ -18,13 +18,15 @@ exports.getOrders = async (req, res) => {
 
 /**
  * @param {Request} req
- * @param {Response} res
  */
 exports.addOrders = async (req, res) => {
     const COOKIE_ID = process.env.COOKIE_ID;
     const cookieExist = uncompressedKey(req.cookies[COOKIE_ID]);
     let cartItems = req.cookies[constant.CART_COOKIE_VALUE];
-    let orders = {_id: req.body.id, quantity: (Number(req.body.quantity))}
+    let orders = {
+        _id: '047f6d6c9bae2780258f566f9cfae93757c8e27b0f056fd3d182894271c32724f87f1d6a9ee6d1c56cca6a4dbafe57a8fd38d00add64026344a02d1facdef5cda5',
+        quantity: (Number(req.body.quantity))
+    }
     let result;
 
     const orderExist = req.orders?.find(prevCartOrder => prevCartOrder._id === orders._id);

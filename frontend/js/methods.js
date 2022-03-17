@@ -1,10 +1,8 @@
-
 async function addToCart(id) {
     const lesson = this.lessons.data.find((lesson) => lesson._id === id)
 
     if (lesson) {
         let updateValues = (lesson.quantity != null) ? lesson.quantity : lesson.availibility
-        console.log(updateValues)
         try {
             const orders = await fetch('/add_order', {
                 method: 'POST',
@@ -57,9 +55,8 @@ async function submitForm(e) {
     }
 }
 
-function reload() {
-    return window.location.reload()
-}
+const reload = () =>
+    window.location.reload()
 
 function navigateToCart() {
     const {isCartOpen} = this;
