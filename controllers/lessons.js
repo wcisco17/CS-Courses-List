@@ -1,5 +1,5 @@
 const {connectDB} = require('../util/db');
-const {constant, uncompressedKey, transformLessonsWithQuantity} = require('../util/util');
+const {transformLessonsWithQuantity} = require('../util/util');
 const {ObjectId} = require('mongodb');
 
 /**
@@ -44,15 +44,6 @@ exports.updatesLessons = async (req, res) => {
         .catch(error => {
             return error
         })
-}
-
-/**
- * @param {Request} req
- * @param {Response} res
- *
- */
-exports.search = (req, res) => {
-
 }
 
 

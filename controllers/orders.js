@@ -22,6 +22,7 @@ exports.getOrders = async (req, res) => {
  */
 exports.addOrders = async (req, res) => {
     const cookieExist = process.env.GUEST_USER;
+    const isRemoveOrder = req.body.removeLesson;
     let orders = {_id: req.body.id, quantity: (Number(req.body.quantity))}
     let result;
 
@@ -30,8 +31,21 @@ exports.addOrders = async (req, res) => {
     let updateOrders;
     let db = (await connectDB(process.env.MONGODB_DB_NAME_TWO));
 
+    // if both are true we remove the order from list all together
+    if (orderExist && isRemoveOrder) {
+        updateOrders = {
+            filter: {
+                order_id: cookieExist,
+            },
+            update: {
+                $pull: {
+                    lessons: {_id: orderExist._id, quantity: orderExist.quantity}
+                }
+            }
+        }
+    }
     // if the orderExists only update the quantity
-    if (orderExist) {
+    else if (orderExist) {
         updateOrders = {
             filter: {
                 order_id: cookieExist,
@@ -41,7 +55,7 @@ exports.addOrders = async (req, res) => {
                 $set: {
                     "lessons.$.quantity": orders.quantity
                 }
-            }
+            },
         }
     }
     // if it's a brand-new order append it to the lessons array
@@ -58,7 +72,7 @@ exports.addOrders = async (req, res) => {
         }
     }
 
-    return db?.updateOne({...updateOrders.filter}, {...updateOrders.update})
+    return db?.updateOne({...updateOrders.filter}, {...updateOrders.update}, {})
         .then(() => {
             result = {result: 'success'}
             res.send(result)

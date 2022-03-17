@@ -1,8 +1,8 @@
 const {Router} = require('express')
 const bodyParser = require('body-parser')
-const {addOrders, getOrders} = require('./controllers/orders');
+const {addOrders, getOrders, removeOrders} = require('./controllers/orders');
 const cookieParser = require('cookie-parser')
-const {getLessons, updatesLessons} = require('./controllers/lessons');
+const {getLessons, updatesLessons, removeLessons} = require('./controllers/lessons');
 const {Collection} = require('mongodb')
 const cors = require('cors')
 const {lessons, orders, custom} = require('./util/custom-middleware');
@@ -16,7 +16,6 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.get('/orders', [lessons.lessonsMiddleware, orders.initializeOrders, custom.logger], getOrders)
 app.put(`/update_lessons`, [orders.initializeOrders, custom.logger], updatesLessons)
 app.get('/lessons', [lessons.lessonsMiddleware, orders.initializeOrders], getLessons)
-
 app.get('/', (req, res) => {
     res.send('Hello, world')
 })
