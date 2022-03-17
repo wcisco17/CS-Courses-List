@@ -15,55 +15,55 @@ exports.orders = {
      * @param {NextFunction} next
      */
     initializeOrders: async (req, res, next) => {
-        const COOKIE_ID = process.env.COOKIE_ID;
-        const cookieExist = req.cookies[COOKIE_ID]
-        const orderCookieList = req.cookies[constant.CART_COOKIE_VALUE]
-        let db;
-        /**** @type {Array<_id: string, quantity: number>}*/
-        let cartItems = [{_id: '', quantity: 0}]
-
-        /*** @type {ECDH} db */
-        const user = crypto.createECDH('secp256k1');
-        const userKey = user.generateKeys();
-
-        // we set both cookies first
-        if (!cookieExist && !orderCookieList) {
-            /*** @type {Collection} db */
-            db = await connectDB(process.env.MONGODB_DB_NAME_TWO);
-
-            res.cookie(COOKIE_ID, userKey)
-            res.cookie(constant.CART_COOKIE_VALUE, cartItems)
-            db.insertOne({order_id: userKey.toString('hex'), lessons: [], ordered: false}, {}, (error, _) => {
-                if (error)
-                    throw new Error(`[Error_initializeOrders Controller]: ${error}`)
-                else
-                    console.log('Saved')
-            })
-            next()
-        }
-        // refresh if the cookie is null.
-        else if (!orderCookieList) {
-            /**** @type {Collection}*/
-            db = await connectDB(process.env.MONGODB_DB_NAME_TWO)
-            const ordersKey = req.cookies[COOKIE_ID];
-            const userKey = uncompressedKey(ordersKey);
-
-            return db.findOne({
-                order_id: userKey
-            }, (err, data) => {
-                if (err) {
-                    req.orders = [{_id: '', quantity: 0}];
-                    next()
-                }
-                const orderIdDB = data?.lessons;
-                req.orders = orderIdDB;
-                res.cookie(constant.CART_COOKIE_VALUE, orderIdDB)
-                next()
-            })
-        } else {
-            req.orders = removeDuplicates(orderCookieList);
-            next()
-        }
+        // const COOKIE_ID = process.env.COOKIE_ID;
+        // const cookieExist = req.cookies[COOKIE_ID]
+        // const orderCookieList = req.cookies[constant.CART_COOKIE_VALUE]
+        // let db;
+        // /**** @type {Array<_id: string, quantity: number>}*/
+        // let cartItems = [{_id: '', quantity: 0}]
+        //
+        // /*** @type {ECDH} db */
+        // const user = crypto.createECDH('secp256k1');
+        // const userKey = user.generateKeys();
+        //
+        // // we set both cookies first
+        // if (!cookieExist && !orderCookieList) {
+        //     /*** @type {Collection} db */
+        //     db = await connectDB(process.env.MONGODB_DB_NAME_TWO);
+        //
+        //     res.cookie(COOKIE_ID, userKey)
+        //     res.cookie(constant.CART_COOKIE_VALUE, cartItems)
+        //     db.insertOne({order_id: userKey.toString('hex'), lessons: [], ordered: false}, {}, (error, _) => {
+        //         if (error)
+        //             throw new Error(`[Error_initializeOrders Controller]: ${error}`)
+        //         else
+        //             console.log('Saved')
+        //     })
+        //     next()
+        // }
+        // // refresh if the cookie is null.
+        // else if (!orderCookieList) {
+        //     /**** @type {Collection}*/
+        //     db = await connectDB(process.env.MONGODB_DB_NAME_TWO)
+        //     const ordersKey = req.cookies[COOKIE_ID];
+        //     const userKey = uncompressedKey(ordersKey);
+        //
+        //     return db.findOne({
+        //         order_id: userKey
+        //     }, (err, data) => {
+        //         if (err) {
+        //             req.orders = [{_id: '', quantity: 0}];
+        //             next()
+        //         }
+        //         const orderIdDB = data?.lessons;
+        //         req.orders = orderIdDB;
+        //         res.cookie(constant.CART_COOKIE_VALUE, orderIdDB)
+        //         next()
+        //     })
+        // } else {
+        //     req.orders = removeDuplicates(orderCookieList);
+        //     next()
+        // }
     },
     /**
      * @param {Request} req
@@ -71,14 +71,14 @@ exports.orders = {
      * @param {NextFunction} next
      */
     refreshCart: async (req, res, next) => {
-        const orderCookieList = req.cookies[constant.CART_COOKIE_VALUE]
-        if (!orderCookieList) {
-            req.orders = []
-            next()
-        } else {
-            req.orders = removeDuplicates(orderCookieList);
-            next()
-        }
+        // const orderCookieList = req.cookies[constant.CART_COOKIE_VALUE]
+        // if (!orderCookieList) {
+        //     req.orders = []
+        //     next()
+        // } else {
+        //     req.orders = removeDuplicates(orderCookieList);
+        //     next()
+        // }
     }
 }
 
