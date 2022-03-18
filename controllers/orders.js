@@ -31,7 +31,7 @@ exports.addOrders = async (req, res) => {
     let updateOrders;
     let db = (await connectDB(process.env.MONGODB_DB_NAME_TWO));
 
-    // if both are true we remove the order from list all together
+    // if both are true we remove the order from list [all together]
     if (orderExist && isRemoveOrder) {
         updateOrders = {
             filter: {
